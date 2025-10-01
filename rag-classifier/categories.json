@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Infrastructure",
+    "keywords": ["road", "bridge", "building", "construction", "infrastructure", "maintenance", "repair", "pothole", "street", "sidewalk", "footpath", "flyover", "traffic light", "street light", "drainage", "sewage", "pipe", "water supply", "broken", "damaged", "crack"],
+    "subcategories": ["Roads and Highways", "Public Buildings", "Water Infrastructure", "Drainage Systems", "Street Lighting", "Traffic Infrastructure"],
+    "severity_indicators": {
+      "critical": ["accident", "danger", "collapse", "burst", "flooding", "blocked"],
+      "high": ["broken", "damaged", "not working", "major", "urgent"],
+      "medium": ["minor damage", "needs repair", "maintenance", "improvement"],
+      "low": ["suggestion", "enhancement", "cosmetic", "minor"]
+    }
+  },
+  {
+    "name": "Healthcare",
+    "keywords": ["hospital", "doctor", "medicine", "health", "medical", "clinic", "patient", "treatment", "emergency", "ambulance", "pharmacy", "nurse", "vaccination", "surgery", "disease", "illness", "medical equipment", "sanitization"],
+    "subcategories": ["Hospitals", "Primary Health Centers", "Emergency Services", "Medical Equipment", "Sanitation", "Public Health Programs"],
+    "severity_indicators": {
+      "critical": ["emergency", "life threatening", "critical patient", "no ambulance", "medical emergency"],
+      "high": ["urgent treatment", "serious illness", "equipment failure", "no medicine"],
+      "medium": ["appointment delay", "minor treatment", "routine checkup"],
+      "low": ["general inquiry", "information", "suggestion"]
+    }
+  },
+  {
+    "name": "Education",
+    "keywords": ["school", "college", "university", "education", "teacher", "student", "learning", "classroom", "library", "laboratory", "playground", "fees", "admission", "examination", "textbook", "scholarship", "infrastructure", "faculty"],
+    "subcategories": ["Primary Education", "Secondary Education", "Higher Education", "Infrastructure", "Faculty Issues", "Administrative Issues"],
+    "severity_indicators": {
+      "critical": ["safety hazard", "building collapse", "no classes", "teacher assault"],
+      "high": ["no teacher", "building damage", "no facilities", "examination issues"],
+      "medium": ["infrastructure needs", "faculty shortage", "administrative delay"],
+      "low": ["suggestion", "improvement", "minor issue"]
+    }
+  },
+  {
+    "name": "Transportation",
+    "keywords": ["bus", "train", "transport", "traffic", "vehicle", "metro", "auto", "taxi", "parking", "railway", "station", "route", "fare", "schedule", "delay", "overcrowding", "accident", "signal"],
+    "subcategories": ["Public Transport", "Traffic Management", "Railway Services", "Road Safety", "Parking", "Transport Infrastructure"],
+    "severity_indicators": {
+      "critical": ["accident", "derailment", "major breakdown", "safety hazard"],
+      "high": ["service disruption", "major delay", "overcrowding", "fare issues"],
+      "medium": ["minor delay", "route change", "cleanliness", "comfort"],
+      "low": ["suggestion", "feedback", "information"]
+    }
+  },
+  {
+    "name": "Environment",
+    "keywords": ["pollution", "garbage", "waste", "tree", "park", "clean", "environment", "air", "water", "noise", "plastic", "recycling", "garden", "green", "sanitation", "toxic", "smell", "river", "lake"],
+    "subcategories": ["Air Pollution", "Water Pollution", "Noise Pollution", "Waste Management", "Green Spaces", "Sanitation"],
+    "severity_indicators": {
+      "critical": ["toxic", "poisonous", "health hazard", "contamination", "major pollution"],
+      "high": ["severe pollution", "garbage accumulation", "foul smell", "environmental damage"],
+      "medium": ["littering", "minor pollution", "cleanliness", "maintenance"],
+      "low": ["suggestion", "awareness", "minor improvement"]
+    }
+  },
+  {
+    "name": "Public Safety",
+    "keywords": ["police", "crime", "safety", "security", "theft", "violence", "emergency", "fire", "accident", "harassment", "law and order", "patrol", "investigation", "criminal", "robbery", "assault"],
+    "subcategories": ["Law and Order", "Fire Safety", "Emergency Services", "Crime Prevention", "Traffic Safety", "Public Security"],
+    "severity_indicators": {
+      "critical": ["murder", "rape", "major accident", "fire", "bomb threat", "terrorism"],
+      "high": ["robbery", "assault", "major crime", "serious threat", "violence"],
+      "medium": ["minor theft", "harassment", "suspicious activity", "safety concern"],
+      "low": ["general safety", "suggestion", "awareness", "minor incident"]
+    }
+  },
+  {
+    "name": "Utilities",
+    "keywords": ["electricity", "power", "water", "gas", "internet", "phone", "utility", "supply", "connection", "outage", "billing", "meter", "cable", "broadband", "mobile network", "landline"],
+    "subcategories": ["Electricity", "Water Supply", "Gas Supply", "Telecommunications", "Internet Services", "Billing Issues"],
+    "severity_indicators": {
+      "critical": ["major outage", "gas leak", "electrical hazard", "no water supply"],
+      "high": ["power cut", "water shortage", "connection failure", "billing error"],
+      "medium": ["intermittent supply", "slow internet", "minor issues"],
+      "low": ["general inquiry", "suggestion", "minor complaint"]
+    }
+  },
+  {
+    "name": "Governance",
+    "keywords": ["government", "office", "official", "service", "department", "document", "certificate", "license", "permit", "registration", "administrative", "bureaucracy", "corruption", "procedure", "application", "processing"],
+    "subcategories": ["Administrative Services", "Document Processing", "Licensing", "Permits", "Public Services", "Government Offices"],
+    "severity_indicators": {
+      "critical": ["corruption", "major misconduct", "illegal activity", "fraud"],
+      "high": ["service denial", "major delay", "harassment", "procedural violation"],
+      "medium": ["administrative delay", "document issues", "minor procedural problems"],
+      "low": ["general inquiry", "information", "suggestion"]
+    }
+  },
+  {
+    "name": "Social Services",
+    "keywords": ["pension", "welfare", "benefit", "subsidy", "ration", "social security", "disability", "elderly", "women", "child", "family", "marriage", "birth certificate", "death certificate", "caste certificate"],
+    "subcategories": ["Pension Services", "Welfare Programs", "Social Security", "Certificate Services", "Disability Services", "Women and Child Services"],
+    "severity_indicators": {
+      "critical": ["benefit denial", "pension stopped", "emergency assistance needed"],
+      "high": ["major delay in benefits", "service denial", "urgent assistance"],
+      "medium": ["administrative delay", "document processing", "minor issues"],
+      "low": ["general inquiry", "information", "application status"]
+    }
+  },
+  {
+    "name": "Economic Issues",
+    "keywords": ["employment", "job", "loan", "business", "tax", "revenue", "economy", "financial", "bank", "payment", "salary", "wage", "subsidy", "grant", "market", "trade", "industry"],
+    "subcategories": ["Employment Services", "Financial Services", "Tax Issues", "Business Services", "Economic Development", "Banking Services"],
+    "severity_indicators": {
+      "critical": ["major economic loss", "employment crisis", "financial fraud"],
+      "high": ["unemployment", "business closure", "major financial issue", "tax problem"],
+      "medium": ["employment assistance", "loan processing", "minor financial issues"],
+      "low": ["general inquiry", "information", "consultation"]
+    }
+  }
+]

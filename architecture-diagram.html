@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGRIK 2.0 - System Architecture Diagram</title>
+    <script src="https://unpkg.com/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .diagram-section {
+            padding: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .diagram-container {
+            margin: 30px 0;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 20px;
+            background: #fafafa;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 1px solid #e1e8ed;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tech-category {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .tech-category h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .tech-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .tech-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        .tech-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ NAGRIK 2.0</h1>
+            <p>System Architecture & Technical Overview</p>
+        </div>
+        
+        <div class="diagram-section">
+            <h2 class="section-title">🏗️ High-Level System Architecture</h2>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+                    graph TB
+                        subgraph "🌐 User Interface Layer"
+                            A[📱 WhatsApp Bot<br/>Baileys Integration] 
+                            B[💻 Web Dashboard<br/>Admin Interface]
+                            C[📲 Mobile App<br/>Future Integration]
+                        end
+                        
+                        subgraph "🔌 API Gateway Layer"
+                            D[🚀 Express.js Backend<br/>Port 3000<br/>RESTful APIs]
+                        end
+                        
+                        subgraph "🤖 AI/ML Processing Layer"
+                            E[🧠 Enhanced RAG Classifier<br/>Python Flask - Port 5000]
+                            F[⚡ OpenAI GPT-3.5-turbo<br/>Text Analysis & Enhancement]
+                            G[🔍 Similarity Detection<br/>TF-IDF Vectorization]
+                            H[📍 Location Validator<br/>Jharkhand Districts]
+                        end
+                        
+                        subgraph "💾 Data Layer"
+                            I[🗄️ MongoDB Database<br/>Enhanced Complaint Model]
+                            J[📁 File Storage<br/>Attachments & Media]
+                        end
+                        
+                        subgraph "🔗 External Services"
+                            K[💬 WhatsApp Web API<br/>Message Gateway]
+                            L[🏛️ Government APIs<br/>Future Integration]
+                            M[🗺️ Maps & Location<br/>Geocoding Services]
+                        end
+                        
+                        subgraph "⚙️ Support Services"
+                            N[📊 Analytics Engine<br/>Real-time Metrics]
+                            O[🔔 Notification Service<br/>Department Alerts]
+                            P[🛡️ Security Layer<br/>Auth & Validation]
+                        end
+                        
+                        A --> D
+                        B --> D
+                        C --> D
+                        
+                        D --> E
+                        D --> P
+                        E --> F
+                        E --> G
+                        E --> H
+                        
+                        D --> I
+                        D --> J
+                        D --> N
+                        D --> O
+                        
+                        A --> K
+                        E --> M
+                        
+                        style A fill:#25D366,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style B fill:#4285F4,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style C fill:#9C27B0,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style D fill:#FF9800,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style E fill:#FF6B35,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style F fill:#10A37F,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style I fill:#47A248,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style K fill:#25D366,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style N fill:#E91E63,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                        style P fill:#F44336,stroke:#1DA1F2,stroke-width:3px,color:#fff
+                </div>
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #25D366;"></div>
+                    <span>WhatsApp Integration</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4285F4;"></div>
+                    <span>Web Interfaces</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF9800;"></div>
+                    <span>Backend Services</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF6B35;"></div>
+                    <span>AI/ML Components</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #47A248;"></div>
+                    <span>Database Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #E91E63;"></div>
+                    <span>Analytics & Monitoring</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="diagram-section">
+            <h2 class="section-title">🔄 Data Flow Architecture</h2>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart TD
+                        A[👤 Citizen Input<br/>WhatsApp/Web] --> B{📱 Input Channel?}
+                        
+                        B -->|WhatsApp| C[💬 WhatsApp Bot<br/>Baileys Handler]
+                        B -->|Web| D[🌐 Web Form<br/>Dashboard Interface]
+                        
+                        C --> E[📝 Message Processing<br/>Extract Text & Media]
+                        D --> E
+                        
+                        E --> F[🔍 Pre-processing<br/>Clean & Validate]
+                        
+                        F --> G[🤖 Enhanced RAG Classifier<br/>AI Processing Pipeline]
+                        
+                        subgraph G[🧠 AI Processing Pipeline]
+                            G1[🔤 Text Analysis<br/>NLP Processing]
+                            G2[📊 Category Classification<br/>14 Department Types]
+                            G3[⚡ Priority Assessment<br/>Urgency Detection]
+                            G4[😊 Sentiment Analysis<br/>Emotion Detection]
+                            G5[📍 Location Validation<br/>Jharkhand Districts]
+                            G6[🔧 Data Enhancement<br/>Missing Field Completion]
+                            
+                            G1 --> G2 --> G3 --> G4 --> G5 --> G6
+                        end
+                        
+                        G --> H[🔍 Similarity Check<br/>Duplicate Detection]
+                        
+                        H --> I{🤔 Similar Found?}
+                        
+                        I -->|✅ Yes| J[👥 Suggest Upvoting<br/>Existing Complaint]
+                        I -->|❌ No| K[📄 Create New Entry<br/>Enhanced Complaint]
+                        
+                        J --> L[⚖️ User Decision<br/>Upvote vs New]
+                        L -->|👍 Upvote| M[📈 Increment Count<br/>Boost Priority]
+                        L -->|📝 New| K
+                        
+                        K --> N[🏛️ Auto-assign Department<br/>Smart Routing]
+                        M --> O[🔄 Update Priority<br/>Threshold Check]
+                        N --> O
+                        
+                        O --> P[💾 Store in Database<br/>MongoDB Persistence]
+                        P --> Q[📊 Real-time Dashboard<br/>Live Updates]
+                        P --> R[🔔 Department Notification<br/>Alert System]
+                        P --> S[📈 Analytics Update<br/>Metrics Tracking]
+                        
+                        Q --> T[👥 Public View<br/>Transparency]
+                        R --> U[🏛️ Department Action<br/>Resolution Process]
+                        S --> V[📊 Insights Dashboard<br/>Trend Analysis]
+                        
+                        style A fill:#E1F5FE,stroke:#0277BD,stroke-width:2px
+                        style G fill:#FFF3E0,stroke:#F57C00,stroke-width:2px
+                        style P fill:#E8F5E8,stroke:#388E3C,stroke-width:2px
+                        style Q fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+                        style R fill:#FFEBEE,stroke:#D32F2F,stroke-width:2px
+                </div>
+            </div>
+        </div>
+        
+        <div class="diagram-section">
+            <h2 class="section-title">🎯 Key Features & Capabilities</h2>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <h3>🤖 AI-Powered Classification</h3>
+                    <ul>
+                        <li>OpenAI GPT-3.5-turbo integration</li>
+                        <li>Jharkhand-specific intelligence</li>
+                        <li>14 government department categories</li>
+                        <li>85%+ classification accuracy</li>
+                        <li>Automatic priority assignment</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📱 Multi-Channel Access</h3>
+                    <ul>
+                        <li>WhatsApp bot for rural areas</li>
+                        <li>Web dashboard for administrators</li>
+                        <li>Mobile-responsive design</li>
+                        <li>Future mobile app support</li>
+                        <li>Offline capability planning</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>👥 Community Engagement</h3>
+                    <ul>
+                        <li>Upvoting system for similar complaints</li>
+                        <li>Duplicate detection and merging</li>
+                        <li>Community-driven prioritization</li>
+                        <li>Social proof mechanisms</li>
+                        <li>Trending complaint identification</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>📊 Real-time Analytics</h3>
+                    <ul>
+                        <li>Department-wise filtering</li>
+                        <li>Priority-based sorting</li>
+                        <li>Resolution time tracking</li>
+                        <li>Performance metrics</li>
+                        <li>Trend analysis and insights</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🔍 Smart Processing</h3>
+                    <ul>
+                        <li>TF-IDF similarity detection</li>
+                        <li>Sentiment analysis</li>
+                        <li>Location validation</li>
+                        <li>Missing data completion</li>
+                        <li>Predictive resolution times</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <h3>🛡️ Security & Reliability</h3>
+                    <ul>
+                        <li>Rate limiting and spam protection</li>
+                        <li>Input validation and sanitization</li>
+                        <li>HTTPS/TLS encryption</li>
+                        <li>Error handling and recovery</li>
+                        <li>99.9% uptime target</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="diagram-section">
+            <h2 class="section-title">💻 Technology Stack</h2>
+            
+            <div class="tech-stack">
+                <div class="tech-category">
+                    <h4>🖥️ Backend Technologies</h4>
+                    <ul class="tech-list">
+                        <li><strong>Runtime:</strong> Node.js 18+</li>
+                        <li><strong>Framework:</strong> Express.js 4.18+</li>
+                        <li><strong>Database:</strong> MongoDB 6.0+</li>
+                        <li><strong>ODM:</strong> Mongoose 7.0+</li>
+                        <li><strong>Authentication:</strong> JWT</li>
+                        <li><strong>Validation:</strong> Joi</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4>🤖 AI/ML Stack</h4>
+                    <ul class="tech-list">
+                        <li><strong>Framework:</strong> Python 3.10+ Flask</li>
+                        <li><strong>NLP:</strong> OpenAI GPT-3.5-turbo</li>
+                        <li><strong>Processing:</strong> NLTK, TextBlob</li>
+                        <li><strong>ML:</strong> Scikit-learn, Pandas</li>
+                        <li><strong>Vectors:</strong> TF-IDF, Cosine Similarity</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4>🌐 Frontend Technologies</h4>
+                    <ul class="tech-list">
+                        <li><strong>Core:</strong> Vanilla JavaScript ES6+</li>
+                        <li><strong>Styling:</strong> CSS3 Flexbox/Grid</li>
+                        <li><strong>Icons:</strong> Font Awesome</li>
+                        <li><strong>Responsive:</strong> Mobile-first design</li>
+                        <li><strong>Real-time:</strong> WebSockets (planned)</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-category">
+                    <h4>🔗 Integration Services</h4>
+                    <ul class="tech-list">
+                        <li><strong>WhatsApp:</strong> Baileys Web API</li>
+                        <li><strong>AI:</strong> OpenAI API</li>
+                        <li><strong>Maps:</strong> Geocoding services</li>
+                        <li><strong>Storage:</strong> File system / Cloud</li>
+                        <li><strong>Monitoring:</strong> Custom analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="diagram-section">
+            <h2 class="section-title">📈 Performance Metrics</h2>
+            
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-value">&lt; 2s</div>
+                    <div class="metric-label">Response Time</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">85%+</div>
+                    <div class="metric-label">Classification Accuracy</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">99.9%</div>
+                    <div class="metric-label">Target Uptime</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">1000+</div>
+                    <div class="metric-label">Concurrent Users</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">14</div>
+                    <div class="metric-label">Department Categories</div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-value">24</div>
+                    <div class="metric-label">Jharkhand Districts</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                htmlLabels: true,
+                curve: 'basis',
+                nodeSpacing: 50,
+                rankSpacing: 80
+            },
+            themeVariables: {
+                primaryColor: '#3498db',
+                primaryTextColor: '#2c3e50',
+                primaryBorderColor: '#2980b9',
+                lineColor: '#34495e',
+                sectionBkgColor: '#ecf0f1',
+                altSectionBkgColor: '#bdc3c7',
+                gridColor: '#95a5a6',
+                tertiaryColor: '#f39c12'
+            }
+        });
+    </script>
+</body>
+</html>

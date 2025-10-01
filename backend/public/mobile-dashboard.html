@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGRIK 2.0 - Mobile Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #5a67d8;
+            --secondary: #4fd1c7;
+            --success: #48bb78;
+            --warning: #ed8936;
+            --danger: #f56565;
+            --info: #4299e1;
+            
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            --radius: 0.75rem;
+            --radius-lg: 1rem;
+        }
+
+        body {
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-800);
+        }
+
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .refresh-btn {
+            padding: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            display: inline-block;
+        }
+
+        .stat-change.positive {
+            background: rgba(72, 187, 120, 0.1);
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            background: rgba(245, 101, 101, 0.1);
+            color: var(--danger);
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 2fr 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0;
+            border-bottom: 1px solid var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .card-body {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        /* Departments List */
+        .departments-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .department-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            transition: background 0.2s;
+        }
+
+        .department-item:hover {
+            background: var(--gray-50);
+        }
+
+        .department-item:last-child {
+            border-bottom: none;
+        }
+
+        .department-info {
+            flex: 1;
+        }
+
+        .department-name {
+            font-weight: 500;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .department-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .department-count {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 1rem;
+        }
+
+        /* Recent Activity */
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            transition: background 0.2s;
+        }
+
+        .activity-item:hover {
+            background: var(--gray-50);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+            line-height: 1.4;
+        }
+
+        .activity-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+
+        /* Priority Indicators */
+        .priority-urgent { background: var(--danger); }
+        .priority-high { background: var(--warning); }
+        .priority-medium { background: var(--info); }
+        .priority-low { background: var(--success); }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 1rem;
+            color: var(--gray-500);
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--gray-300);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--gray-500);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Error State */
+        .error-state {
+            background: rgba(245, 101, 101, 0.1);
+            border: 1px solid rgba(245, 101, 101, 0.2);
+            border-radius: var(--radius);
+            padding: 1rem;
+            text-align: center;
+            color: var(--danger);
+            margin: 1rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .main {
+                padding: 0.75rem;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+            
+            .stat-card {
+                padding: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 1.5rem;
+            }
+            
+            .card-header,
+            .card-body {
+                padding: 1rem;
+            }
+            
+            .card-header {
+                padding-bottom: 0;
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🏛️</div>
+                    <span>NAGRIK 2.0</span>
+                </div>
+                <div class="header-actions">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span id="statusText">Online</span>
+                    </div>
+                    <button class="refresh-btn" onclick="refreshData()" title="Refresh Data">
+                        <span id="refreshIcon">🔄</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Quick Stats -->
+            <section class="quick-stats" id="quickStats">
+                <!-- Stats will be loaded dynamically -->
+            </section>
+
+            <!-- Main Cards -->
+            <section class="cards-grid">
+                <!-- Departments Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Department Overview</h2>
+                        <p class="card-subtitle">Active departments and complaint counts</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="departments-list" id="departmentsList">
+                            <!-- Departments will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Activity</h2>
+                        <p class="card-subtitle">Latest complaint submissions</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list" id="activityList">
+                            <!-- Activity will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // Global state
+        let dashboardData = {};
+        let isLoading = false;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Mobile Dashboard initialized');
+            loadDashboardData();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(loadDashboardData, 30000);
+        });
+
+        async function loadDashboardData() {
+            if (isLoading) return;
+            isLoading = true;
+            
+            try {
+                updateStatus('Loading...', false);
+                
+                // Try to load real data
+                const response = await fetch('/api/dashboard/overview');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.success) {
+                        dashboardData = data.data;
+                        updateStatus('Online', true);
+                    } else {
+                        throw new Error(data.message);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.warn('Using sample data:', error);
+                dashboardData = generateSampleData();
+                updateStatus('Demo Mode', false);
+            }
+            
+            // Render all components
+            renderQuickStats();
+            renderDepartments();
+            renderActivity();
+            
+            isLoading = false;
+        }
+
+        function generateSampleData() {
+            return {
+                overview: {
+                    totalComplaints: 1847,
+                    totalUsers: 1234,
+                    resolutionRate: 82.3,
+                    avgResolutionDays: 2.8
+                },
+                distribution: {
+                    byStatus: [
+                        { _id: 'Open', count: 234 },
+                        { _id: 'In Progress', count: 567 },
+                        { _id: 'Resolved', count: 1521 },
+                        { _id: 'Closed', count: 125 }
+                    ],
+                    byCategory: [
+                        { _id: 'Infrastructure', count: 456 },
+                        { _id: 'Water Supply', count: 398 },
+                        { _id: 'Power', count: 287 },
+                        { _id: 'Healthcare', count: 234 },
+                        { _id: 'Education', count: 198 },
+                        { _id: 'Environment', count: 167 },
+                        { _id: 'Transport', count: 107 }
+                    ]
+                },
+                recentComplaints: [
+                    {
+                        complaintId: 'NAGRIK001234',
+                        category: 'Infrastructure',
+                        severity: 'High',
+                        status: 'Open',
+                        createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+                        userId: 'citizen001'
+                    },
+                    {
+                        complaintId: 'NAGRIK001235',
+                        category: 'Water Supply',
+                        severity: 'Critical',
+                        status: 'In Progress',
+                        createdAt: new Date(Date.now() - 120 * 60 * 1000).toISOString(),
+                        userId: 'citizen002'
+                    },
+                    {
+                        complaintId: 'NAGRIK001236',
+                        category: 'Power',
+                        severity: 'Medium',
+                        status: 'Open',
+                        createdAt: new Date(Date.now() - 180 * 60 * 1000).toISOString(),
+                        userId: 'citizen003'
+                    },
+                    {
+                        complaintId: 'NAGRIK001237',
+                        category: 'Healthcare',
+                        severity: 'High',
+                        status: 'Resolved',
+                        createdAt: new Date(Date.now() - 240 * 60 * 1000).toISOString(),
+                        userId: 'citizen004'
+                    }
+                ]
+            };
+        }
+
+        function renderQuickStats() {
+            const overview = dashboardData.overview || {};
+            const distribution = dashboardData.distribution || {};
+            
+            const openComplaints = distribution.byStatus?.find(s => s._id === 'Open')?.count || 0;
+            const inProgressComplaints = distribution.byStatus?.find(s => s._id === 'In Progress')?.count || 0;
+            const pendingComplaints = openComplaints + inProgressComplaints;
+            
+            const stats = [
+                {
+                    icon: '📊',
+                    number: overview.totalComplaints || 0,
+                    label: 'Total Complaints',
+                    change: '+12.5%',
+                    changeType: 'positive',
+                    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                },
+                {
+                    icon: '⏳',
+                    number: pendingComplaints,
+                    label: 'Pending',
+                    change: '-8.2%',
+                    changeType: 'positive',
+                    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                },
+                {
+                    icon: '✅',
+                    number: `${overview.resolutionRate || 0}%`,
+                    label: 'Resolution Rate',
+                    change: '+5.1%',
+                    changeType: 'positive',
+                    gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)'
+                },
+                {
+                    icon: '⚡',
+                    number: `${overview.avgResolutionDays || 0}d`,
+                    label: 'Avg Time',
+                    change: '-18%',
+                    changeType: 'positive',
+                    gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)'
+                }
+            ];
+
+            const quickStats = document.getElementById('quickStats');
+            quickStats.innerHTML = stats.map(stat => `
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: ${stat.gradient};">
+                        ${stat.icon}
+                    </div>
+                    <div class="stat-number">${stat.number}</div>
+                    <div class="stat-label">${stat.label}</div>
+                    <div class="stat-change ${stat.changeType}">
+                        ${stat.change}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDepartments() {
+            const departments = [
+                { name: 'Public Works Department', count: 456, open: 23, inProgress: 67 },
+                { name: 'Water Resources', count: 398, open: 18, inProgress: 45 },
+                { name: 'Power Department', count: 287, open: 34, inProgress: 23 },
+                { name: 'Health Department', count: 234, open: 12, inProgress: 18 },
+                { name: 'Education Department', count: 198, open: 8, inProgress: 15 },
+                { name: 'Environment Department', count: 167, open: 15, inProgress: 12 },
+                { name: 'Transport Department', count: 107, open: 6, inProgress: 9 }
+            ];
+
+            const departmentsList = document.getElementById('departmentsList');
+            departmentsList.innerHTML = departments.map(dept => `
+                <div class="department-item">
+                    <div class="department-info">
+                        <div class="department-name">${dept.name}</div>
+                        <div class="department-stats">
+                            <span>Open: ${dept.open}</span>
+                            <span>In Progress: ${dept.inProgress}</span>
+                        </div>
+                    </div>
+                    <div class="department-count">${dept.count}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderActivity() {
+            const recentComplaints = dashboardData.recentComplaints || [];
+            const activityList = document.getElementById('activityList');
+            
+            if (recentComplaints.length === 0) {
+                activityList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📝</div>
+                        <p>No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+
+            activityList.innerHTML = recentComplaints.map(complaint => {
+                const timeAgo = getTimeAgo(new Date(complaint.createdAt));
+                const priorityClass = `priority-${complaint.severity.toLowerCase()}`;
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon ${priorityClass}">
+                            ${getSeverityIcon(complaint.severity)}
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                ${complaint.severity} Priority - ${complaint.category}
+                            </div>
+                            <div class="activity-description">
+                                Complaint #${complaint.complaintId}
+                            </div>
+                            <div class="activity-time">
+                                ${timeAgo} • Status: ${complaint.status}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStatus(text, isOnline) {
+            const statusText = document.getElementById('statusText');
+            const statusDot = document.querySelector('.status-dot');
+            
+            statusText.textContent = text;
+            statusDot.style.background = isOnline ? 'var(--success)' : 'var(--warning)';
+        }
+
+        async function refreshData() {
+            const refreshIcon = document.getElementById('refreshIcon');
+            refreshIcon.style.animation = 'spin 1s linear infinite';
+            
+            await loadDashboardData();
+            
+            refreshIcon.style.animation = '';
+            refreshIcon.textContent = '✓';
+            
+            setTimeout(() => {
+                refreshIcon.textContent = '🔄';
+            }, 2000);
+        }
+
+        // Utility functions
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInMinutes = Math.floor((now - date) / 60000);
+            
+            if (diffInMinutes < 1) return 'Just now';
+            if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+            
+            const diffInHours = Math.floor(diffInMinutes / 60);
+            if (diffInHours < 24) return `${diffInHours}h ago`;
+            
+            const diffInDays = Math.floor(diffInHours / 24);
+            return `${diffInDays}d ago`;
+        }
+
+        function getSeverityIcon(severity) {
+            switch (severity?.toLowerCase()) {
+                case 'critical': return '🚨';
+                case 'high': return '⚠️';
+                case 'medium': return 'ℹ️';
+                case 'low': return '✅';
+                default: return 'ℹ️';
+            }
+        }
+    </script>
+</body>
+</html>

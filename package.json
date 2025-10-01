@@ -1,0 +1,40 @@
+{
+  "name": "nagrik-2.0",
+  "version": "1.0.0",
+  "description": "Complete Grievance Redressal Platform with AI Classification",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:backend\" \"npm run start:whatsapp\" \"npm run start:rag\" \"npm run start:dashboard\"",
+    "start:backend": "cd backend && npm start",
+    "start:whatsapp": "cd whatsapp-service && npm start", 
+    "start:rag": "cd rag-classifier && python enhanced_app.py",
+    "start:dashboard": "cd frontend && python -m http.server 8080",
+    "demo": "concurrently --kill-others \"npm run start:backend\" \"npm run start:whatsapp\" \"npm run start:rag\" \"npm run open:dashboard\"",
+    "open:dashboard": "timeout 5 && start http://localhost:8080",
+    "test": "npm run test:backend && npm run test:integration",
+    "test:backend": "cd backend && npm test",
+    "test:integration": "cd tests && npm test",
+    "setup": "npm run setup:backend && npm run setup:whatsapp && npm run setup:rag && npm run setup:frontend",
+    "setup:backend": "cd backend && npm install",
+    "setup:whatsapp": "cd whatsapp-service && npm install",
+    "setup:rag": "cd rag-classifier && pip install -r requirements.txt",
+    "setup:frontend": "mkdir -p frontend && copy dashboard.html frontend\\index.html",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:whatsapp\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:whatsapp": "cd whatsapp-service && npm run dev"
+  },
+  "keywords": [
+    "grievance",
+    "government",
+    "whatsapp",
+    "ai",
+    "classification",
+    "mongodb",
+    "nodejs"
+  ],
+  "author": "NAGRIK Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

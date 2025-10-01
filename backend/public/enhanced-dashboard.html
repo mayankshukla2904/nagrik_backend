@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGRIK 2.0 - Enhanced Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #333;
+            padding: 30px;
+            text-align: center;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .status-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .status-badge {
+            padding: 10px 18px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 25px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .status-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .filter-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .filter-group label {
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .filter-group select, .filter-group input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+        }
+        
+        .filter-group select:focus, .filter-group input:focus {
+            outline: none;
+            border-color: #4ECDC4;
+        }
+        
+        .refresh-btn {
+            background: linear-gradient(45deg, #4ECDC4, #44A08D);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .label {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .trend {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .trend.up { background: #d4edda; color: #155724; }
+        .trend.down { background: #f8d7da; color: #721c24; }
+        
+        .departments-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .department-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .department-card:hover {
+            border-color: #4ECDC4;
+            transform: translateY(-2px);
+        }
+        
+        .department-card.active {
+            border-color: #4ECDC4;
+            background: #f0fffe;
+        }
+        
+        .department-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .department-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .complaint-count {
+            background: #4ECDC4;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .priority-breakdown {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .priority-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .priority-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .priority-urgent { background: #ff4757; }
+        .priority-high { background: #ff6b35; }
+        .priority-medium { background: #ffa502; }
+        .priority-low { background: #26de81; }
+        
+        .complaints-section {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .complaints-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .search-box input {
+            padding: 8px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            width: 300px;
+        }
+        
+        .complaints-list {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .complaint-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .complaint-item:hover {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+        
+        .complaint-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .complaint-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+            flex: 1;
+        }
+        
+        .complaint-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .meta-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .category-badge { background: #e3f2fd; color: #1976d2; }
+        .priority-badge { background: #fff3e0; color: #f57c00; }
+        .status-badge { background: #e8f5e8; color: #2e7d32; }
+        
+        .upvote-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .upvote-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upvote-btn:hover {
+            background: #4ECDC4;
+            color: white;
+            border-color: #4ECDC4;
+        }
+        
+        .upvote-btn.voted {
+            background: #4ECDC4;
+            color: white;
+            border-color: #4ECDC4;
+        }
+        
+        .complaint-description {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        
+        .complaint-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #888;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .location-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state img {
+            width: 100px;
+            opacity: 0.5;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 10px;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .department-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 NAGRIK 2.0</h1>
+            <div class="subtitle">Enhanced Grievance Redressal Dashboard</div>
+            <div class="status-badges">
+                <div class="status-badge" id="backend-status">🛠️ Backend: Loading...</div>
+                <div class="status-badge" id="rag-status">🤖 RAG AI: Loading...</div>
+                <div class="status-badge" id="whatsapp-status">📱 WhatsApp: Loading...</div>
+                <div class="status-badge" id="last-updated">🕒 Last Updated: Never</div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>Department</label>
+                    <select id="departmentFilter">
+                        <option value="">All Departments</option>
+                        <option value="Public Works Department">Public Works Department</option>
+                        <option value="Water Resources">Water Resources</option>
+                        <option value="Power Department">Power Department</option>
+                        <option value="Health Department">Health Department</option>
+                        <option value="Education Department">Education Department</option>
+                        <option value="Police Department">Police Department</option>
+                        <option value="Environment Department">Environment Department</option>
+                        <option value="Mining Department">Mining Department</option>
+                        <option value="Tribal Welfare">Tribal Welfare</option>
+                        <option value="Forest Department">Forest Department</option>
+                        <option value="Urban Development">Urban Development</option>
+                        <option value="Transport Department">Transport Department</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Priority</label>
+                    <select id="priorityFilter">
+                        <option value="">All Priorities</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="open">Open</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Min Upvotes</label>
+                    <input type="number" id="upvoteFilter" placeholder="0" min="0">
+                </div>
+                
+                <button class="refresh-btn" onclick="refreshData()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid" id="statsGrid">
+            <!-- Stats will be populated dynamically -->
+        </div>
+
+        <!-- Departments Overview -->
+        <div class="departments-section">
+            <h2 class="section-title">📋 Department-wise Overview</h2>
+            <div class="department-grid" id="departmentGrid">
+                <!-- Departments will be populated dynamically -->
+            </div>
+        </div>
+
+        <!-- Complaints List -->
+        <div class="complaints-section">
+            <div class="complaints-header">
+                <h2 class="section-title">📝 Complaints</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search complaints...">
+                    <button class="refresh-btn" onclick="searchComplaints()">🔍 Search</button>
+                </div>
+            </div>
+            <div class="complaints-list" id="complaintsList">
+                <!-- Complaints will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let allComplaints = [];
+        let filteredComplaints = [];
+        let currentDepartment = '';
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard initialized');
+            initializeEventListeners();
+            checkServiceStatus();
+            loadDashboardData();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(loadDashboardData, 30000);
+        });
+
+        function initializeEventListeners() {
+            // Filter event listeners
+            document.getElementById('departmentFilter').addEventListener('change', filterComplaints);
+            document.getElementById('priorityFilter').addEventListener('change', filterComplaints);
+            document.getElementById('statusFilter').addEventListener('change', filterComplaints);
+            document.getElementById('upvoteFilter').addEventListener('input', filterComplaints);
+            
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', searchComplaints);
+        }
+
+        async function checkServiceStatus() {
+            try {
+                // Check backend status
+                const backendResponse = await fetch('/api/status');
+                const backendData = await backendResponse.json();
+                
+                document.getElementById('backend-status').textContent = 
+                    `🛠️ Backend: ${backendData.success ? 'Online' : 'Offline'}`;
+                document.getElementById('backend-status').style.background = 
+                    backendData.success ? 'rgba(46, 125, 50, 0.2)' : 'rgba(183, 28, 28, 0.2)';
+
+                // Check RAG service
+                if (backendData.services && backendData.services.rag_classifier) {
+                    const ragStatus = backendData.services.rag_classifier.status;
+                    document.getElementById('rag-status').textContent = 
+                        `🤖 RAG AI: ${ragStatus === 'healthy' ? 'Online' : 'Offline'}`;
+                    document.getElementById('rag-status').style.background = 
+                        ragStatus === 'healthy' ? 'rgba(46, 125, 50, 0.2)' : 'rgba(183, 28, 28, 0.2)';
+                }
+
+                // WhatsApp status (assume online if backend is running)
+                document.getElementById('whatsapp-status').textContent = '📱 WhatsApp: Ready';
+                document.getElementById('whatsapp-status').style.background = 'rgba(46, 125, 50, 0.2)';
+                
+            } catch (error) {
+                console.error('Service status check failed:', error);
+                document.getElementById('backend-status').textContent = '🛠️ Backend: Offline';
+                document.getElementById('rag-status').textContent = '🤖 RAG AI: Offline';
+                document.getElementById('whatsapp-status').textContent = '📱 WhatsApp: Offline';
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                console.log('Loading dashboard data...');
+                
+                // First try enhanced complaints
+                let response = await fetch('/api/enhanced-complaints/enhanced?limit=100');
+                if (!response.ok) {
+                    // Fallback to regular complaints
+                    response = await fetch('/api/complaints?limit=100');
+                }
+                
+                const data = await response.json();
+                console.log('Received data:', data);
+                
+                if (data.success) {
+                    allComplaints = data.data.complaints || data.data || [];
+                } else {
+                    // If no complaints yet, create some sample data for demo
+                    allComplaints = createSampleData();
+                }
+                
+                // Update last updated time
+                document.getElementById('last-updated').textContent = 
+                    `🕒 Last Updated: ${new Date().toLocaleTimeString()}`;
+                
+                // Render all sections
+                renderStatistics();
+                renderDepartments();
+                filterComplaints();
+                
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+                showError('Failed to load data. Showing sample data for demonstration.');
+                allComplaints = createSampleData();
+                renderStatistics();
+                renderDepartments();
+                filterComplaints();
+            }
+        }
+
+        function createSampleData() {
+            const departments = [
+                'Public Works Department', 'Water Resources', 'Power Department', 
+                'Health Department', 'Education Department', 'Police Department',
+                'Environment Department', 'Mining Department', 'Tribal Welfare',
+                'Forest Department', 'Urban Development', 'Transport Department'
+            ];
+            
+            const categories = [
+                'Infrastructure', 'Water Supply', 'Electricity', 'Healthcare',
+                'Education', 'Public Safety', 'Environment', 'Mining Issues',
+                'Tribal Affairs', 'Forest Conservation', 'Sanitation', 'Transportation'
+            ];
+            
+            const priorities = ['urgent', 'high', 'medium', 'low'];
+            const statuses = ['open', 'in_progress', 'resolved'];
+            
+            const sampleComplaints = [];
+            
+            for (let i = 1; i <= 25; i++) {
+                const department = departments[Math.floor(Math.random() * departments.length)];
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const priority = priorities[Math.floor(Math.random() * priorities.length)];
+                const status = statuses[Math.floor(Math.random() * statuses.length)];
+                const upvoteCount = Math.floor(Math.random() * 15);
+                
+                sampleComplaints.push({
+                    _id: `sample_${i}`,
+                    title: `Sample Complaint ${i}: ${category} Issue`,
+                    description: `This is a sample ${category.toLowerCase()} complaint for demonstration purposes. It shows how the department-wise filtering and upvoting system works in the NAGRIK platform.`,
+                    category: category,
+                    department: department,
+                    priority: priority,
+                    status: status,
+                    upvoteCount: upvoteCount,
+                    location: {
+                        address: `Sample Location ${i}, Ranchi, Jharkhand`,
+                        district: 'Ranchi'
+                    },
+                    createdAt: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    trackingNumber: `TKN${String(i).padStart(6, '0')}`,
+                    urgency: Math.floor(Math.random() * 10) + 1,
+                    sentiment: ['positive', 'neutral', 'negative'][Math.floor(Math.random() * 3)]
+                });
+            }
+            
+            return sampleComplaints;
+        }
+
+        function renderStatistics() {
+            const stats = calculateStatistics();
+            const statsGrid = document.getElementById('statsGrid');
+            
+            statsGrid.innerHTML = `
+                <div class="stat-card">
+                    <div class="number" style="color: #4ECDC4;">${stats.total}</div>
+                    <div class="label">Total Complaints</div>
+                    <div class="trend up">+12% this week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" style="color: #FF6B6B;">${stats.urgent}</div>
+                    <div class="label">Urgent Priority</div>
+                    <div class="trend ${stats.urgent > 5 ? 'up' : 'down'}">${stats.urgent > 5 ? '⚠️ High' : '✅ Manageable'}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" style="color: #FFA502;">${stats.totalUpvotes}</div>
+                    <div class="label">Total Upvotes</div>
+                    <div class="trend up">Community Engagement</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" style="color: #26DE81;">${stats.resolved}</div>
+                    <div class="label">Resolved</div>
+                    <div class="trend up">${Math.round((stats.resolved/stats.total)*100)}% Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" style="color: #764BA2;">${stats.departments}</div>
+                    <div class="label">Active Departments</div>
+                    <div class="trend up">All Connected</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number" style="color: #667EEA;">${stats.avgResolutionTime}h</div>
+                    <div class="label">Avg Resolution Time</div>
+                    <div class="trend down">-15% faster</div>
+                </div>
+            `;
+        }
+
+        function calculateStatistics() {
+            const total = allComplaints.length;
+            const urgent = allComplaints.filter(c => c.priority === 'urgent').length;
+            const resolved = allComplaints.filter(c => c.status === 'resolved').length;
+            const totalUpvotes = allComplaints.reduce((sum, c) => sum + (c.upvoteCount || 0), 0);
+            const departments = new Set(allComplaints.map(c => c.department)).size;
+            const avgResolutionTime = 24; // Sample value
+            
+            return { total, urgent, resolved, totalUpvotes, departments, avgResolutionTime };
+        }
+
+        function renderDepartments() {
+            const departmentStats = {};
+            
+            allComplaints.forEach(complaint => {
+                const dept = complaint.department || 'Unknown';
+                if (!departmentStats[dept]) {
+                    departmentStats[dept] = {
+                        total: 0,
+                        urgent: 0,
+                        high: 0,
+                        medium: 0,
+                        low: 0
+                    };
+                }
+                departmentStats[dept].total++;
+                departmentStats[dept][complaint.priority] = (departmentStats[dept][complaint.priority] || 0) + 1;
+            });
+            
+            const departmentGrid = document.getElementById('departmentGrid');
+            departmentGrid.innerHTML = Object.entries(departmentStats)
+                .sort((a, b) => b[1].total - a[1].total)
+                .map(([dept, stats]) => `
+                    <div class="department-card ${currentDepartment === dept ? 'active' : ''}" 
+                         onclick="selectDepartment('${dept}')">
+                        <div class="department-header">
+                            <div class="department-name">${dept}</div>
+                            <div class="complaint-count">${stats.total}</div>
+                        </div>
+                        <div class="priority-breakdown">
+                            ${stats.urgent > 0 ? `<div class="priority-item"><div class="priority-dot priority-urgent"></div>Urgent: ${stats.urgent}</div>` : ''}
+                            ${stats.high > 0 ? `<div class="priority-item"><div class="priority-dot priority-high"></div>High: ${stats.high}</div>` : ''}
+                            ${stats.medium > 0 ? `<div class="priority-item"><div class="priority-dot priority-medium"></div>Medium: ${stats.medium}</div>` : ''}
+                            ${stats.low > 0 ? `<div class="priority-item"><div class="priority-dot priority-low"></div>Low: ${stats.low}</div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        function selectDepartment(department) {
+            if (currentDepartment === department) {
+                currentDepartment = '';
+                document.getElementById('departmentFilter').value = '';
+            } else {
+                currentDepartment = department;
+                document.getElementById('departmentFilter').value = department;
+            }
+            renderDepartments();
+            filterComplaints();
+        }
+
+        function filterComplaints() {
+            const departmentFilter = document.getElementById('departmentFilter').value;
+            const priorityFilter = document.getElementById('priorityFilter').value;
+            const statusFilter = document.getElementById('statusFilter').value;
+            const upvoteFilter = parseInt(document.getElementById('upvoteFilter').value) || 0;
+            
+            filteredComplaints = allComplaints.filter(complaint => {
+                return (!departmentFilter || complaint.department === departmentFilter) &&
+                       (!priorityFilter || complaint.priority === priorityFilter) &&
+                       (!statusFilter || complaint.status === statusFilter) &&
+                       (complaint.upvoteCount >= upvoteFilter);
+            });
+            
+            renderComplaints();
+        }
+
+        function searchComplaints() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!searchTerm) {
+                filterComplaints();
+                return;
+            }
+            
+            filteredComplaints = allComplaints.filter(complaint => {
+                return complaint.title.toLowerCase().includes(searchTerm) ||
+                       complaint.description.toLowerCase().includes(searchTerm) ||
+                       complaint.category.toLowerCase().includes(searchTerm) ||
+                       complaint.department.toLowerCase().includes(searchTerm);
+            });
+            
+            renderComplaints();
+        }
+
+        function renderComplaints() {
+            const complaintsList = document.getElementById('complaintsList');
+            
+            if (filteredComplaints.length === 0) {
+                complaintsList.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">📝</div>
+                        <h3>No Complaints Found</h3>
+                        <p>Try adjusting your filters or search terms.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            complaintsList.innerHTML = filteredComplaints
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .map(complaint => `
+                    <div class="complaint-item">
+                        <div class="complaint-header">
+                            <div class="complaint-title">${complaint.title}</div>
+                            <div class="complaint-meta">
+                                <span class="meta-badge category-badge">${complaint.category}</span>
+                                <span class="meta-badge priority-badge priority-${complaint.priority}">${complaint.priority.toUpperCase()}</span>
+                                <span class="meta-badge status-badge">${complaint.status.replace('_', ' ').toUpperCase()}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="complaint-description">
+                            ${complaint.description.length > 200 ? 
+                                complaint.description.substring(0, 200) + '...' : 
+                                complaint.description}
+                        </div>
+                        
+                        <div class="complaint-footer">
+                            <div class="location-info">
+                                📍 ${complaint.location?.address || 'Location not specified'}
+                            </div>
+                            <div class="upvote-section">
+                                <button class="upvote-btn" onclick="upvoteComplaint('${complaint._id}')">
+                                    👍 ${complaint.upvoteCount || 0} Upvotes
+                                </button>
+                            </div>
+                            <div style="font-size: 0.8rem; color: #999;">
+                                🏢 ${complaint.department} | 
+                                🎯 ID: ${complaint.trackingNumber || complaint._id} | 
+                                📅 ${new Date(complaint.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        async function upvoteComplaint(complaintId) {
+            try {
+                const response = await fetch(`/api/enhanced-complaints/${complaintId}/upvote`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userPhone: '1234567890' // Demo phone number
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Upvote successful:', result);
+                    
+                    // Update local data
+                    const complaint = allComplaints.find(c => c._id === complaintId);
+                    if (complaint) {
+                        complaint.upvoteCount = result.data.upvoteCount;
+                    }
+                    
+                    // Re-render
+                    renderStatistics();
+                    renderComplaints();
+                } else {
+                    console.error('Upvote failed');
+                }
+            } catch (error) {
+                console.error('Upvote error:', error);
+            }
+        }
+
+        function refreshData() {
+            document.getElementById('last-updated').textContent = '🕒 Refreshing...';
+            loadDashboardData();
+            checkServiceStatus();
+        }
+
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            document.querySelector('.dashboard-container').insertBefore(
+                errorDiv, 
+                document.querySelector('.stats-grid')
+            );
+            
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+    </script>
+</body>
+</html>

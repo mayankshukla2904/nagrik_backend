@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGRIK - Data Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            border-bottom: 3px solid #FF6B6B;
+            color: #FF6B6B;
+        }
+        
+        .nav-tab:hover {
+            background: #e9ecef;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card p {
+            opacity: 0.9;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .status.submitted {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .status.in-progress {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        
+        .status.resolved {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 50px;
+            color: #dc3545;
+            background: #f8d7da;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .refresh-btn {
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn:hover {
+            background: #ff5252;
+        }
+        
+        .api-endpoints {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .api-endpoints h3 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+        
+        .endpoint {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #FF6B6B;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .method {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏛️ NAGRIK</h1>
+            <p>Digital Grievance Platform - Data Dashboard</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">📊 Overview</button>
+            <button class="nav-tab" onclick="showTab('complaints')">📝 Complaints</button>
+            <button class="nav-tab" onclick="showTab('analytics')">📈 Analytics</button>
+            <button class="nav-tab" onclick="showTab('api')">🔌 API Access</button>
+        </div>
+        
+        <div class="content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-content active">
+                <h2>System Overview</h2>
+                <button class="refresh-btn" onclick="loadOverview()">🔄 Refresh Data</button>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="total-complaints">0</h3>
+                        <p>Total Complaints</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="pending-complaints">0</h3>
+                        <p>Pending</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="resolved-complaints">0</h3>
+                        <p>Resolved</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="avg-response-time">0</h3>
+                        <p>Avg Response Time</p>
+                    </div>
+                </div>
+                
+                <div id="overview-content" class="loading">
+                    Loading system overview...
+                </div>
+            </div>
+            
+            <!-- Complaints Tab -->
+            <div id="complaints" class="tab-content">
+                <h2>All Complaints</h2>
+                <button class="refresh-btn" onclick="loadComplaints()">🔄 Refresh Data</button>
+                
+                <div id="complaints-content" class="loading">
+                    Loading complaints data...
+                </div>
+            </div>
+            
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-content">
+                <h2>Analytics & Reports</h2>
+                <button class="refresh-btn" onclick="loadAnalytics()">🔄 Refresh Data</button>
+                
+                <div id="analytics-content" class="loading">
+                    Loading analytics data...
+                </div>
+            </div>
+            
+            <!-- API Tab -->
+            <div id="api" class="tab-content">
+                <h2>API Endpoints</h2>
+                
+                <div class="api-endpoints">
+                    <h3>Available Data Endpoints:</h3>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> http://localhost:3000/api/complaints
+                        <br><small>Retrieve all complaints with pagination</small>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> http://localhost:3000/api/complaints/:id
+                        <br><small>Get specific complaint by ID</small>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> http://localhost:3000/api/dashboard/stats
+                        <br><small>Get dashboard statistics</small>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> http://localhost:3000/api/dashboard/analytics
+                        <br><small>Get detailed analytics data</small>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">GET</span> http://localhost:3000/api/health
+                        <br><small>System health check</small>
+                    </div>
+                    
+                    <div class="endpoint">
+                        <span class="method">POST</span> http://localhost:3000/api/complaints
+                        <br><small>Create new complaint</small>
+                    </div>
+                </div>
+                
+                <h3>PowerShell Commands:</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        # Get all complaints<br>
+                        Invoke-RestMethod -Uri "http://localhost:3000/api/complaints" -Method GET
+                    </div>
+                    
+                    <div class="endpoint">
+                        # Get dashboard stats<br>
+                        Invoke-RestMethod -Uri "http://localhost:3000/api/dashboard/stats" -Method GET
+                    </div>
+                    
+                    <div class="endpoint">
+                        # Get system health<br>
+                        Invoke-RestMethod -Uri "http://localhost:3000/api/health" -Method GET
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API Base URL
+        const API_BASE = 'http://localhost:3000/api';
+        
+        // Tab switching function
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+            
+            // Load data for the selected tab
+            switch(tabName) {
+                case 'overview':
+                    loadOverview();
+                    break;
+                case 'complaints':
+                    loadComplaints();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        }
+        
+        // Load overview data
+        async function loadOverview() {
+            const content = document.getElementById('overview-content');
+            content.innerHTML = '<div class="loading">Loading system overview...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/dashboard/stats`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update stat cards
+                    document.getElementById('total-complaints').textContent = data.data.total || 0;
+                    document.getElementById('pending-complaints').textContent = data.data.pending || 0;
+                    document.getElementById('resolved-complaints').textContent = data.data.resolved || 0;
+                    document.getElementById('avg-response-time').textContent = data.data.avgResponseTime || '0h';
+                    
+                    content.innerHTML = `
+                        <div class="table-container">
+                            <h3 style="padding: 20px; margin: 0;">Recent Activity</h3>
+                            <p style="padding: 0 20px 20px; color: #666;">System statistics loaded successfully</p>
+                        </div>
+                    `;
+                } else {
+                    content.innerHTML = `<div class="error">Error: ${data.message}</div>`;
+                }
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="error">
+                        <h3>Unable to connect to backend</h3>
+                        <p>Make sure the backend server is running on port 3000</p>
+                        <p>Error: ${error.message}</p>
+                        <div style="margin-top: 20px;">
+                            <strong>To start the backend:</strong><br>
+                            <code>cd backend && node src/app.js</code>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load complaints data
+        async function loadComplaints() {
+            const content = document.getElementById('complaints-content');
+            content.innerHTML = '<div class="loading">Loading complaints...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/complaints`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    const tableHTML = `
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Priority</th>
+                                        <th>Date</th>
+                                        <th>Channel</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${data.data.map(complaint => `
+                                        <tr>
+                                            <td>${complaint.id}</td>
+                                            <td>${complaint.title}</td>
+                                            <td>${complaint.category}</td>
+                                            <td><span class="status ${complaint.status}">${complaint.status}</span></td>
+                                            <td>${complaint.priority}</td>
+                                            <td>${new Date(complaint.createdAt).toLocaleDateString()}</td>
+                                            <td>${complaint.channel}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    content.innerHTML = tableHTML;
+                } else {
+                    content.innerHTML = `
+                        <div class="error">
+                            <h3>No complaints found</h3>
+                            <p>No complaint data available. This could be because:</p>
+                            <ul style="text-align: left; margin-top: 15px;">
+                                <li>No complaints have been submitted yet</li>
+                                <li>Database is not connected (running in demo mode)</li>
+                                <li>Backend API is not responding properly</li>
+                            </ul>
+                            <p style="margin-top: 20px;">Try submitting a complaint via WhatsApp to see data here.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="error">
+                        <h3>Unable to load complaints</h3>
+                        <p>Error: ${error.message}</p>
+                        <div style="margin-top: 20px;">
+                            <strong>Troubleshooting:</strong><br>
+                            1. Make sure backend is running on port 3000<br>
+                            2. Check if CORS is properly configured<br>
+                            3. Verify API endpoints are accessible
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load analytics data
+        async function loadAnalytics() {
+            const content = document.getElementById('analytics-content');
+            content.innerHTML = '<div class="loading">Loading analytics...</div>';
+            
+            try {
+                const response = await fetch(`${API_BASE}/dashboard/analytics`);
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const analyticsHTML = `
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <h3>${data.data.categoryCounts?.length || 0}</h3>
+                                <p>Categories</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>${data.data.channelStats?.whatsapp || 0}</h3>
+                                <p>WhatsApp Reports</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>${data.data.channelStats?.web || 0}</h3>
+                                <p>Web Reports</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3>${data.data.channelStats?.call || 0}</h3>
+                                <p>Call Reports</p>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <h3 style="padding: 20px; margin: 0;">Category Breakdown</h3>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Count</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(data.data.categoryCounts || []).map(cat => `
+                                        <tr>
+                                            <td>${cat.category}</td>
+                                            <td>${cat.count}</td>
+                                            <td>${cat.percentage}%</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    content.innerHTML = analyticsHTML;
+                } else {
+                    content.innerHTML = `<div class="error">Error loading analytics: ${data.message}</div>`;
+                }
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="error">
+                        <h3>Unable to load analytics</h3>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Load initial data
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOverview();
+        });
+    </script>
+</body>
+</html>

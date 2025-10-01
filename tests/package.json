@@ -1,0 +1,32 @@
+{
+  "name": "nagrik-tests",
+  "version": "1.0.0",
+  "description": "Test suite for NAGRIK platform",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:backend": "jest tests/unit/backend",
+    "test:integration": "jest tests/integration",
+    "test:whatsapp": "jest tests/unit/whatsapp",
+    "test:rag": "python -m pytest rag-tests/",
+    "test:all": "npm run test && npm run test:rag"
+  },
+  "dependencies": {
+    "jest": "^29.6.4",
+    "supertest": "^6.3.3",
+    "mongodb-memory-server": "^8.15.1",
+    "axios": "^1.5.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "../backend/src/**/*.js",
+      "../whatsapp-service/src/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}

@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAGRIK 2.0 - Modern Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            --info-gradient: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-header {
+            padding: 0 2rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-header p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            border-right: 3px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(102, 126, 234, 0.05);
+            color: var(--text-primary);
+            border-right-color: #667eea;
+        }
+
+        .nav-link i {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            overflow-y: auto;
+        }
+
+        .top-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .refresh-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .content-area {
+            padding: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .stat-change {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive { color: #10b981; }
+        .stat-change.negative { color: #ef4444; }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .chart-filters {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: white;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-description {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-time {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Departments Grid */
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .department-card {
+            background: var(--bg-secondary);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .department-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .department-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .department-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .complaint-count {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .priority-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .priority-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .priority-urgent { background: #ef4444; }
+        .priority-high { background: #f97316; }
+        .priority-medium { background: #eab308; }
+        .priority-low { background: #22c55e; }
+
+        /* Loading States */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--text-muted);
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error States */
+        .error-state {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            color: #dc2626;
+        }
+
+        .error-state i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #ef4444;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .departments-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .top-bar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+            
+            .top-actions {
+                justify-content: space-between;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mb-0 { margin-bottom: 0; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mt-2 { margin-top: 1rem; }
+        .hidden { display: none; }
+        
+        /* Gradients for icons */
+        .gradient-blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-green { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .gradient-orange { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .gradient-red { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); }
+        .gradient-purple { background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-building"></i> NAGRIK 2.0</h1>
+                <p>Grievance Management Dashboard</p>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#overview" class="nav-link active" data-section="overview">
+                            <i class="fas fa-chart-line"></i>
+                            Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#departments" class="nav-link" data-section="departments">
+                            <i class="fas fa-sitemap"></i>
+                            Departments
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#complaints" class="nav-link" data-section="complaints">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Complaints
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#analytics" class="nav-link" data-section="analytics">
+                            <i class="fas fa-chart-bar"></i>
+                            Analytics
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reports" class="nav-link" data-section="reports">
+                            <i class="fas fa-file-alt"></i>
+                            Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            Settings
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div>
+                    <h1 class="page-title" id="pageTitle">Dashboard Overview</h1>
+                </div>
+                <div class="top-actions">
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span id="systemStatus">All Systems Operational</span>
+                    </div>
+                    <button class="refresh-btn" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Overview Section -->
+                <div id="overview-section" class="section active">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid" id="statsGrid">
+                        <!-- Stats will be dynamically loaded -->
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="charts-section">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Complaint Trends</h3>
+                                <div class="chart-filters">
+                                    <button class="filter-btn active" data-period="7">7D</button>
+                                    <button class="filter-btn" data-period="30">30D</button>
+                                    <button class="filter-btn" data-period="90">90D</button>
+                                </div>
+                            </div>
+                            <div id="trendChart" style="height: 300px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                                <div>
+                                    <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                                    <p>Trend chart will be displayed here</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3 class="chart-title">Category Distribution</h3>
+                            </div>
+                            <div id="categoryChart" style="height: 300px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
+                                <div class="text-center">
+                                    <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                                    <p>Category distribution chart</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="recent-activity">
+                        <div class="activity-header">
+                            <h3 class="chart-title">Recent Activity</h3>
+                            <button class="filter-btn">View All</button>
+                        </div>
+                        <div class="activity-list" id="recentActivity">
+                            <!-- Activity items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Departments Section -->
+                <div id="departments-section" class="section hidden">
+                    <div class="departments-grid" id="departmentsGrid">
+                        <!-- Department cards will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Other sections placeholder -->
+                <div id="complaints-section" class="section hidden">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Complaints section coming soon...</p>
+                    </div>
+                </div>
+
+                <div id="analytics-section" class="section hidden">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Advanced analytics coming soon...</p>
+                    </div>
+                </div>
+
+                <div id="reports-section" class="section hidden">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Reports section coming soon...</p>
+                    </div>
+                </div>
+
+                <div id="settings-section" class="section hidden">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Settings coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let dashboardData = {
+            stats: {},
+            complaints: [],
+            departments: {}
+        };
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Modern Dashboard initialized');
+            initializeNavigation();
+            loadDashboardData();
+            
+            // Auto-refresh every 30 seconds
+            setInterval(loadDashboardData, 30000);
+        });
+
+        function initializeNavigation() {
+            // Navigation handling
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all nav links
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Hide all sections
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                        section.classList.add('hidden');
+                    });
+                    
+                    // Show selected section
+                    const sectionName = this.dataset.section;
+                    const section = document.getElementById(`${sectionName}-section`);
+                    if (section) {
+                        section.classList.remove('hidden');
+                        section.classList.add('active');
+                    }
+                    
+                    // Update page title
+                    const pageTitle = this.textContent.trim();
+                    document.getElementById('pageTitle').textContent = `Dashboard - ${pageTitle}`;
+                    
+                    // Load section-specific data
+                    if (sectionName === 'departments') {
+                        loadDepartmentsData();
+                    }
+                });
+            });
+
+            // Chart filter buttons
+            document.querySelectorAll('.filter-btn[data-period]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn[data-period]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // Load chart data for selected period
+                    loadChartData(this.dataset.period);
+                });
+            });
+        }
+
+        async function loadDashboardData() {
+            try {
+                console.log('Loading dashboard data...');
+                updateSystemStatus('Loading...', false);
+                
+                // Try to load real data from API
+                let response = await fetch('/api/dashboard/overview');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                if (data.success) {
+                    dashboardData = data.data;
+                } else {
+                    throw new Error(data.message || 'Failed to load data');
+                }
+                
+                updateSystemStatus('All Systems Operational', true);
+                
+            } catch (error) {
+                console.warn('Failed to load real data, using sample data:', error);
+                updateSystemStatus('Demo Mode - Sample Data', false);
+                
+                // Load sample data for demonstration
+                dashboardData = createSampleDashboardData();
+            }
+            
+            // Render all components
+            renderStats();
+            renderRecentActivity();
+            loadChartData('7');
+        }
+
+        function createSampleDashboardData() {
+            return {
+                overview: {
+                    totalComplaints: 1247,
+                    totalUsers: 892,
+                    resolutionRate: 78.5,
+                    avgResolutionDays: 3.2
+                },
+                distribution: {
+                    byStatus: [
+                        { _id: 'Open', count: 156 },
+                        { _id: 'In Progress', count: 234 },
+                        { _id: 'Resolved', count: 789 },
+                        { _id: 'Closed', count: 68 }
+                    ],
+                    byCategory: [
+                        { _id: 'Infrastructure', count: 312 },
+                        { _id: 'Water Supply', count: 245 },
+                        { _id: 'Power', count: 189 },
+                        { _id: 'Healthcare', count: 156 },
+                        { _id: 'Education', count: 134 },
+                        { _id: 'Environment', count: 98 },
+                        { _id: 'Other', count: 113 }
+                    ],
+                    bySeverity: [
+                        { _id: 'Low', count: 456 },
+                        { _id: 'Medium', count: 512 },
+                        { _id: 'High', count: 234 },
+                        { _id: 'Critical', count: 45 }
+                    ]
+                },
+                recentComplaints: [
+                    {
+                        _id: '1',
+                        complaintId: 'NAGRIK000001',
+                        category: 'Infrastructure',
+                        severity: 'High',
+                        status: 'Open',
+                        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                        userId: 'user123'
+                    },
+                    {
+                        _id: '2',
+                        complaintId: 'NAGRIK000002',
+                        category: 'Water Supply',
+                        severity: 'Medium',
+                        status: 'In Progress',
+                        createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+                        userId: 'user456'
+                    },
+                    {
+                        _id: '3',
+                        complaintId: 'NAGRIK000003',
+                        category: 'Power',
+                        severity: 'Critical',
+                        status: 'Open',
+                        createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+                        userId: 'user789'
+                    }
+                ]
+            };
+        }
+
+        function renderStats() {
+            const overview = dashboardData.overview || {};
+            const statsGrid = document.getElementById('statsGrid');
+            
+            const stats = [
+                {
+                    title: 'Total Complaints',
+                    value: overview.totalComplaints || 0,
+                    change: '+12.5%',
+                    changeType: 'positive',
+                    icon: 'fas fa-exclamation-circle',
+                    gradient: 'gradient-blue'
+                },
+                {
+                    title: 'Active Users',
+                    value: overview.totalUsers || 0,
+                    change: '+8.2%',
+                    changeType: 'positive',
+                    icon: 'fas fa-users',
+                    gradient: 'gradient-green'
+                },
+                {
+                    title: 'Resolution Rate',
+                    value: `${overview.resolutionRate || 0}%`,
+                    change: '+3.1%',
+                    changeType: 'positive',
+                    icon: 'fas fa-check-circle',
+                    gradient: 'gradient-purple'
+                },
+                {
+                    title: 'Avg Resolution Time',
+                    value: `${overview.avgResolutionDays || 0}d`,
+                    change: '-15.3%',
+                    changeType: 'positive',
+                    icon: 'fas fa-clock',
+                    gradient: 'gradient-orange'
+                },
+                {
+                    title: 'Critical Issues',
+                    value: dashboardData.distribution?.bySeverity?.find(s => s._id === 'Critical')?.count || 0,
+                    change: '-5.2%',
+                    changeType: 'positive',
+                    icon: 'fas fa-exclamation-triangle',
+                    gradient: 'gradient-red'
+                },
+                {
+                    title: 'Departments Active',
+                    value: 12,
+                    change: '100%',
+                    changeType: 'positive',
+                    icon: 'fas fa-building',
+                    gradient: 'gradient-blue'
+                }
+            ];
+
+            statsGrid.innerHTML = stats.map(stat => `
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-number">${stat.value}</div>
+                            <div class="stat-label">${stat.title}</div>
+                            <div class="stat-change ${stat.changeType}">
+                                <i class="fas fa-arrow-${stat.changeType === 'positive' ? 'up' : 'down'}"></i>
+                                ${stat.change} from last month
+                            </div>
+                        </div>
+                        <div class="stat-icon ${stat.gradient}">
+                            <i class="${stat.icon}"></i>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderRecentActivity() {
+            const recentComplaints = dashboardData.recentComplaints || [];
+            const activityList = document.getElementById('recentActivity');
+            
+            if (recentComplaints.length === 0) {
+                activityList.innerHTML = `
+                    <div class="loading">
+                        <p>No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+
+            activityList.innerHTML = recentComplaints.map(complaint => {
+                const timeAgo = getTimeAgo(new Date(complaint.createdAt));
+                const severityColor = getSeverityColor(complaint.severity);
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon ${severityColor}">
+                            <i class="fas fa-exclamation"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">New ${complaint.severity} Priority Complaint</div>
+                            <div class="activity-description">
+                                ${complaint.category} issue reported by ${complaint.userId}
+                            </div>
+                            <div class="activity-time">${timeAgo} • ID: ${complaint.complaintId}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadDepartmentsData() {
+            const departments = [
+                { name: 'Public Works Department', complaints: 312, urgent: 12, high: 45, medium: 156, low: 99 },
+                { name: 'Water Resources', complaints: 245, urgent: 8, high: 34, medium: 123, low: 80 },
+                { name: 'Power Department', complaints: 189, urgent: 15, high: 28, medium: 89, low: 57 },
+                { name: 'Health Department', complaints: 156, urgent: 5, high: 23, medium: 78, low: 50 },
+                { name: 'Education Department', complaints: 134, urgent: 3, high: 18, medium: 67, low: 46 },
+                { name: 'Police Department', complaints: 98, urgent: 18, high: 25, medium: 34, low: 21 },
+                { name: 'Environment Department', complaints: 87, urgent: 4, high: 12, medium: 43, low: 28 },
+                { name: 'Urban Development', complaints: 76, urgent: 2, high: 15, medium: 35, low: 24 }
+            ];
+
+            const departmentsGrid = document.getElementById('departmentsGrid');
+            departmentsGrid.innerHTML = departments.map(dept => `
+                <div class="department-card">
+                    <div class="department-header">
+                        <div class="department-name">${dept.name}</div>
+                        <div class="complaint-count">${dept.complaints}</div>
+                    </div>
+                    <div class="priority-breakdown">
+                        <div class="priority-item">
+                            <div class="priority-dot priority-urgent"></div>
+                            Urgent: ${dept.urgent}
+                        </div>
+                        <div class="priority-item">
+                            <div class="priority-dot priority-high"></div>
+                            High: ${dept.high}
+                        </div>
+                        <div class="priority-item">
+                            <div class="priority-dot priority-medium"></div>
+                            Medium: ${dept.medium}
+                        </div>
+                        <div class="priority-item">
+                            <div class="priority-dot priority-low"></div>
+                            Low: ${dept.low}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadChartData(period) {
+            console.log(`Loading chart data for ${period} days`);
+            // Chart implementation would go here
+            // For now, we'll just show placeholders
+        }
+
+        function updateSystemStatus(message, isOnline) {
+            const statusElement = document.getElementById('systemStatus');
+            const statusDot = document.querySelector('.status-dot');
+            
+            statusElement.textContent = message;
+            
+            if (isOnline) {
+                statusDot.style.background = '#10b981';
+            } else {
+                statusDot.style.background = '#f59e0b';
+            }
+        }
+
+        function refreshData() {
+            const refreshBtn = document.querySelector('.refresh-btn i');
+            refreshBtn.style.animation = 'spin 1s linear infinite';
+            
+            loadDashboardData().then(() => {
+                refreshBtn.style.animation = '';
+                
+                // Show refresh success
+                const originalText = document.querySelector('.refresh-btn').innerHTML;
+                document.querySelector('.refresh-btn').innerHTML = '<i class="fas fa-check"></i> Updated';
+                
+                setTimeout(() => {
+                    document.querySelector('.refresh-btn').innerHTML = originalText;
+                }, 2000);
+            });
+        }
+
+        // Utility functions
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffInMinutes = Math.floor((now - date) / 60000);
+            
+            if (diffInMinutes < 1) return 'Just now';
+            if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+            
+            const diffInHours = Math.floor(diffInMinutes / 60);
+            if (diffInHours < 24) return `${diffInHours}h ago`;
+            
+            const diffInDays = Math.floor(diffInHours / 24);
+            return `${diffInDays}d ago`;
+        }
+
+        function getSeverityColor(severity) {
+            switch (severity?.toLowerCase()) {
+                case 'critical': return 'gradient-red';
+                case 'high': return 'gradient-orange';
+                case 'medium': return 'gradient-blue';
+                case 'low': return 'gradient-green';
+                default: return 'gradient-blue';
+            }
+        }
+    </script>
+</body>
+</html>
